@@ -7,7 +7,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-#[Layout('layouts.app')]
+#[Layout('layouts.auth')]
 #[Title('Iniciar sesión')]
 class Login extends Component
 {
@@ -26,6 +26,13 @@ class Login extends Component
         'password.required' => 'La contraseña es obligatoria.',
     ];
 
+    public function mount(): void
+    {
+        if (Auth::check()) {
+            $this->redirect(route('dashboard'), navigate: true);
+        }
+    }
+
     public function login(): void
     {
         $this->validate();
@@ -40,7 +47,7 @@ class Login extends Component
 
         request()->session()->regenerate();
 
-        $this->redirect('/dashboard', navigate: true);
+        $this->redirect(route('dashboard'), navigate: true);
     }
 
     public function render()
